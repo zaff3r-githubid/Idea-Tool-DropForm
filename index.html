@@ -1,0 +1,767 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  
+  #idrop * { box-sizing: border-box; margin: 0; padding: 0; }
+  #idrop {
+    font-family: 'Syne', system-ui, sans-serif;
+    background: var(--color-background-tertiary);
+    min-height: 500px;
+    padding: 24px 16px 40px;
+  }
+  #idrop .shell {
+    max-width: 540px;
+    margin: 0 auto;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  #idrop .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  #idrop .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #idrop .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #1a1a2e;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #idrop .logo-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+  }
+  #idrop .logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+  }
+  #idrop .gear-btn {
+    background: none;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 8px;
+    padding: 6px 8px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  #idrop .gear-btn:hover { background: var(--color-background-secondary); }
+  
+  #idrop .progress-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 24px;
+    gap: 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-secondary);
+  }
+  #idrop .step-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: 1;
+  }
+  #idrop .step-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    border: 0.5px solid var(--color-border-secondary);
+    color: var(--color-text-tertiary);
+    background: var(--color-background-primary);
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  #idrop .step-dot.active {
+    background: #1a1a2e;
+    border-color: #1a1a2e;
+    color: #fff;
+  }
+  #idrop .step-dot.done {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+  }
+  #idrop .step-label {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  #idrop .step-label.active { color: var(--color-text-primary); }
+  #idrop .step-connector {
+    flex: 1;
+    height: 0.5px;
+    background: var(--color-border-tertiary);
+    margin: 0 8px;
+  }
+  #idrop .body { padding: 24px; }
+  
+  #idrop label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  #idrop .field { margin-bottom: 16px; }
+  #idrop input, #idrop select, #idrop textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Syne', system-ui;
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    transition: border-color 0.15s;
+    outline: none;
+    appearance: none;
+  }
+  #idrop input:focus, #idrop select:focus, #idrop textarea:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.08);
+  }
+  #idrop textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  #idrop .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  
+  #idrop .btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #1a1a2e;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Syne', system-ui;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  #idrop .btn-primary:hover { background: #2d2d4e; transform: translateY(-1px); }
+  #idrop .btn-primary:active { transform: scale(0.99); }
+  #idrop .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  
+  #idrop .btn-secondary {
+    flex: 1;
+    padding: 11px;
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Syne', system-ui;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  #idrop .btn-secondary:hover { background: var(--color-background-tertiary); }
+  
+  #idrop .btn-row { display: flex; gap: 10px; margin-top: 4px; }
+  
+  #idrop .error-msg {
+    font-size: 12px;
+    color: var(--color-text-danger);
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: var(--color-background-danger);
+    border-radius: 8px;
+    border: 0.5px solid var(--color-border-danger);
+  }
+  
+  #idrop .loading-zone {
+    padding: 40px 24px;
+    text-align: center;
+  }
+  #idrop .spinner-ring {
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--color-border-tertiary);
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #idrop .loading-text {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+  #idrop .loading-sub {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  #idrop .enriched-card {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  #idrop .enriched-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  #idrop .enriched-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+  }
+  #idrop .enriched-cat {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 8px;
+    background: #eef2ff;
+    color: #4338ca;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  #idrop .enriched-summary {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  #idrop .metrics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  #idrop .metric-box {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  #idrop .metric-label {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  #idrop .metric-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    line-height: 1;
+  }
+  #idrop .potential-bar {
+    height: 4px;
+    background: var(--color-border-tertiary);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  #idrop .potential-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    transition: width 1s ease;
+  }
+  #idrop .diff-badge {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 0;
+  }
+  #idrop .diff-easy { color: #16a34a; }
+  #idrop .diff-medium { color: #d97706; }
+  #idrop .diff-hard { color: #dc2626; }
+  
+  #idrop .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  #idrop .tag-pill {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 10px;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 20px;
+    color: var(--color-text-secondary);
+  }
+  #idrop .insight-box {
+    background: #faf5ff;
+    border: 0.5px solid #ddd6fe;
+    border-radius: 10px;
+    padding: 12px;
+  }
+  #idrop .insight-label {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #7c3aed;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+  }
+  #idrop .insight-text {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+  #idrop .connections-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  #idrop .conn-chip {
+    font-size: 11px;
+    padding: 4px 10px;
+    background: #f0fdf4;
+    border: 0.5px solid #bbf7d0;
+    border-radius: 20px;
+    color: #15803d;
+  }
+  #idrop .section-micro {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  
+  #idrop .success-zone {
+    padding: 32px 24px;
+    text-align: center;
+  }
+  #idrop .success-icon {
+    width: 56px;
+    height: 56px;
+    background: #f0fdf4;
+    border: 0.5px solid #bbf7d0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 22px;
+  }
+  #idrop .success-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+  }
+  #idrop .success-sub {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  #idrop .notion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 24px;
+  }
+  
+  #idrop .settings-panel {
+    padding: 20px 24px;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-secondary);
+  }
+  #idrop .settings-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+  #idrop .settings-desc {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  #idrop .webhook-row {
+    display: flex;
+    gap: 8px;
+  }
+  #idrop .webhook-row input {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  #idrop .save-btn {
+    padding: 10px 16px;
+    background: #1a1a2e;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Syne', system-ui;
+  }
+  #idrop .saved-msg {
+    font-size: 11px;
+    color: #16a34a;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  #idrop .no-webhook-note {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+</style>
+
+<div id="idrop">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">IdeaDrop — AI-powered idea capture tool for AI practitioner teams. Submit ideas, get AI enrichment, log to Notion.</h2>
+  <div class="shell" id="main-shell">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L10.5 6.5L15 7.5L11.5 11L12.5 15.5L8 13L3.5 15.5L4.5 11L1 7.5L5.5 6.5L8 2Z" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="logo-text">IdeaDrop</div>
+          <div class="logo-sub">AI PRACTITIONER CLASS</div>
+        </div>
+      </div>
+      <button class="gear-btn" onclick="toggleSettings()">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 10a2 2 0 100-4 2 2 0 000 4zm6.32-1.4l-1.1-.63a5.5 5.5 0 000-1l1.1-.63a.5.5 0 00.18-.68l-1-1.73a.5.5 0 00-.68-.18l-1.1.63a5.5 5.5 0 00-.87-.5V2.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.26c-.3.14-.6.3-.87.5L6.08 3.7a.5.5 0 00-.68.18l-1 1.73a.5.5 0 00.18.68l1.1.63a5.5 5.5 0 000 1l-1.1.63a.5.5 0 00-.18.68l1 1.73c.14.24.44.32.68.18l1.1-.63c.27.2.57.36.87.5v1.26c0 .28.22.5.5.5h2c.28 0 .5-.22.5-.5v-1.26c.3-.14.6-.3.87-.5l1.1.63c.24.14.54.06.68-.18l1-1.73a.5.5 0 00-.18-.68z"/></svg>
+        Webhook
+      </button>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress-row" id="progress-row">
+      <div class="step-item">
+        <div class="step-dot active" id="dot1">1</div>
+        <span class="step-label active" id="lbl1">Submit</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-dot" id="dot2">2</div>
+        <span class="step-label" id="lbl2">AI Enrich</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-dot" id="dot3">3</div>
+        <span class="step-label" id="lbl3">Log to Notion</span>
+      </div>
+    </div>
+
+    <!-- FORM STATE -->
+    <div id="view-form" class="body">
+      <div id="err-msg" class="error-msg" style="display:none"></div>
+      <div class="row2">
+        <div class="field">
+          <label>Your name</label>
+          <input type="text" id="f-name" placeholder="e.g. Alex Chen" />
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="f-cat">
+            <option value="">Select...</option>
+            <option>Model Architecture</option>
+            <option>Prompt Engineering</option>
+            <option>Data Pipeline</option>
+            <option>AI Application</option>
+            <option>Tool / Framework</option>
+            <option>Research Direction</option>
+            <option>Ethics & Safety</option>
+            <option>Business Use Case</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Idea title</label>
+        <input type="text" id="f-title" placeholder="A short, punchy title for your idea" />
+      </div>
+      <div class="field">
+        <label>Describe your idea</label>
+        <textarea id="f-desc" placeholder="What's the idea? What problem does it solve? What makes it interesting?"></textarea>
+      </div>
+      <button class="btn-primary" onclick="enrichIdea()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 1z" transform="rotate(45 8 8)"/><path d="M5.5 7.5l5-3-3 5-2-2z"/></svg>
+        Enrich with AI
+      </button>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div id="view-loading" class="loading-zone" style="display:none">
+      <div class="spinner-ring"></div>
+      <div class="loading-text">Claude is enriching your idea</div>
+      <div class="loading-sub" id="loading-dots">analyzing<span id="ldots">...</span></div>
+    </div>
+
+    <!-- PREVIEW STATE -->
+    <div id="view-preview" class="body" style="display:none">
+      <div class="enriched-card">
+        <div class="enriched-header">
+          <div class="enriched-title" id="prev-title"></div>
+          <div class="enriched-cat" id="prev-cat"></div>
+        </div>
+        <div class="enriched-summary" id="prev-summary"></div>
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-label">Potential score</div>
+            <div class="metric-value" id="prev-potential">—</div>
+            <div class="potential-bar"><div class="potential-fill" id="prev-bar" style="width:0%"></div></div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Difficulty</div>
+            <div class="metric-value diff-badge" id="prev-difficulty">—</div>
+          </div>
+        </div>
+        <div class="section-micro">AI Tags</div>
+        <div class="tags-row" id="prev-tags"></div>
+        <div class="section-micro">Related concepts</div>
+        <div class="connections-row" id="prev-conns"></div>
+        <div class="insight-box">
+          <div class="insight-label">✦ Key insight</div>
+          <div class="insight-text" id="prev-insight"></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goBack()">← Edit</button>
+        <button class="btn-primary" id="log-btn" onclick="logToNotion()" style="flex:2">
+          Log to Notion →
+        </button>
+      </div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div id="view-success" class="success-zone" style="display:none">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Idea logged!</div>
+      <div class="success-sub" id="succ-msg"></div>
+      <div class="notion-badge">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" rx="2" fill="currentColor" opacity="0.2"/><path d="M5 5h6v1H5zm0 3h6v1H5zm0 3h4v1H5z" fill="currentColor"/></svg>
+        <span id="succ-notion-text">notion database</span>
+      </div>
+      <button class="btn-primary" onclick="reset()" style="max-width:200px;margin:0 auto">
+        + Drop another idea
+      </button>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div id="settings-panel" class="settings-panel" style="display:none">
+      <div class="settings-title">Make.com Webhook URL</div>
+      <div class="settings-desc">Paste your Make.com webhook URL to push ideas directly to Notion. Leave blank to use demo mode only.</div>
+      <div class="webhook-row">
+        <input type="url" id="webhook-input" placeholder="https://hook.eu1.make.com/..." />
+        <button class="save-btn" onclick="saveWebhook()">Save</button>
+      </div>
+      <div id="saved-msg" class="saved-msg" style="display:none">✓ Webhook saved</div>
+      <div class="no-webhook-note" id="demo-note">
+        <span>○</span> No webhook? AI enrichment still works — Notion sync disabled
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let enrichedData = null;
+let webhookUrl = "";
+
+function setStep(step) {
+  ["form","loading","preview","success"].forEach(s => {
+    document.getElementById("view-" + s).style.display = "none";
+  });
+  document.getElementById("view-" + step).style.display = step === "loading" ? "block" : "block";
+  updateProgress(step);
+}
+
+function updateProgress(step) {
+  const stepMap = { form: 1, loading: 2, preview: 2, success: 3 };
+  const current = stepMap[step] || 1;
+  [1,2,3].forEach(i => {
+    const dot = document.getElementById("dot" + i);
+    const lbl = document.getElementById("lbl" + i);
+    dot.className = "step-dot" + (i < current ? " done" : i === current ? " active" : "");
+    dot.textContent = i < current ? "✓" : i;
+    lbl.className = "step-label" + (i === current ? " active" : "");
+  });
+}
+
+function toggleSettings() {
+  const p = document.getElementById("settings-panel");
+  p.style.display = p.style.display === "none" ? "block" : "none";
+}
+
+function saveWebhook() {
+  webhookUrl = document.getElementById("webhook-input").value.trim();
+  document.getElementById("saved-msg").style.display = webhookUrl ? "block" : "none";
+  document.getElementById("demo-note").style.display = webhookUrl ? "none" : "flex";
+  setTimeout(() => document.getElementById("saved-msg").style.display = "none", 2000);
+}
+
+function showError(msg) {
+  const el = document.getElementById("err-msg");
+  el.textContent = msg;
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 3500);
+}
+
+async function enrichIdea() {
+  const name = document.getElementById("f-name").value.trim();
+  const title = document.getElementById("f-title").value.trim();
+  const desc = document.getElementById("f-desc").value.trim();
+  const cat = document.getElementById("f-cat").value;
+  if (!name || !title || !desc || !cat) { showError("Please fill in all fields."); return; }
+
+  setStep("loading");
+  let dots = 0;
+  const iv = setInterval(() => {
+    dots = (dots + 1) % 4;
+    document.getElementById("ldots").textContent = ".".repeat(dots + 1);
+  }, 400);
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: `You are an AI research analyst for an AI practitioner class. Analyze the idea and return ONLY a raw JSON object — no markdown fences, no explanation. Schema: {"summary":"2 concise sentences explaining the idea and its value","tags":["tag1","tag2","tag3","tag4"],"potential":85,"difficulty":"Medium","connections":["related concept 1","related concept 2","related concept 3"],"insight":"One powerful insight about what makes this idea interesting or what it could unlock"}. potential is integer 0-100. difficulty must be exactly: Easy, Medium, or Hard.`,
+        messages: [{ role: "user", content: `Category: ${cat}\nIdea: ${title}\nDescription: ${desc}` }]
+      })
+    });
+    clearInterval(iv);
+    const data = await res.json();
+    const raw = data.content[0].text.replace(/```json|```/g, "").trim();
+    enrichedData = JSON.parse(raw);
+    
+    document.getElementById("prev-title").textContent = title;
+    document.getElementById("prev-cat").textContent = cat;
+    document.getElementById("prev-summary").textContent = enrichedData.summary;
+    document.getElementById("prev-potential").textContent = enrichedData.potential + "/100";
+    document.getElementById("prev-bar").style.width = enrichedData.potential + "%";
+    
+    const diffEl = document.getElementById("prev-difficulty");
+    diffEl.textContent = enrichedData.difficulty;
+    diffEl.className = "metric-value diff-badge diff-" + enrichedData.difficulty.toLowerCase();
+    
+    const tagsEl = document.getElementById("prev-tags");
+    tagsEl.innerHTML = enrichedData.tags.map(t => `<span class="tag-pill">${t}</span>`).join("");
+    
+    const connsEl = document.getElementById("prev-conns");
+    connsEl.innerHTML = enrichedData.connections.map(c => `<span class="conn-chip">${c}</span>`).join("");
+    
+    document.getElementById("prev-insight").textContent = enrichedData.insight;
+    setStep("preview");
+  } catch(e) {
+    clearInterval(iv);
+    showError("Enrichment failed. Please try again.");
+    setStep("form");
+  }
+}
+
+function goBack() {
+  setStep("form");
+}
+
+async function logToNotion() {
+  const btn = document.getElementById("log-btn");
+  btn.textContent = "Sending...";
+  btn.disabled = true;
+  
+  const name = document.getElementById("f-name").value.trim();
+  const title = document.getElementById("f-title").value.trim();
+  const desc = document.getElementById("f-desc").value.trim();
+  const cat = document.getElementById("f-cat").value;
+  
+  const payload = {
+    submitted_by: name, title, description: desc, category: cat,
+    ai_summary: enrichedData.summary,
+    ai_tags: enrichedData.tags.join(", "),
+    potential_score: enrichedData.potential,
+    difficulty: enrichedData.difficulty,
+    connections: enrichedData.connections.join(", "),
+    key_insight: enrichedData.insight,
+    submitted_at: new Date().toISOString()
+  };
+  
+  let notionLogged = false;
+  if (webhookUrl) {
+    try {
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      notionLogged = true;
+    } catch {}
+  }
+  
+  document.getElementById("succ-msg").textContent = notionLogged
+    ? `"${title}" has been AI-enriched and logged to your team's Notion database.`
+    : `"${title}" was AI-enriched. Connect a webhook to auto-log to Notion.`;
+  document.getElementById("succ-notion-text").textContent = notionLogged ? "logged to notion ✓" : "demo mode — add webhook to sync";
+  
+  btn.disabled = false;
+  setStep("success");
+}
+
+function reset() {
+  document.getElementById("f-name").value = "";
+  document.getElementById("f-title").value = "";
+  document.getElementById("f-desc").value = "";
+  document.getElementById("f-cat").value = "";
+  enrichedData = null;
+  setStep("form");
+}
+</script>
