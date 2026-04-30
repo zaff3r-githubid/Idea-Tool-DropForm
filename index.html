@@ -1,477 +1,569 @@
-
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-  
-  #idrop * { box-sizing: border-box; margin: 0; padding: 0; }
-  #idrop {
-    font-family: 'Syne', system-ui, sans-serif;
-    background: var(--color-background-tertiary);
-    min-height: 500px;
-    padding: 24px 16px 40px;
-  }
-  #idrop .shell {
-    max-width: 540px;
-    margin: 0 auto;
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: 20px;
-    overflow: hidden;
-  }
-  #idrop .top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px 16px;
-    border-bottom: 0.5px solid var(--color-border-tertiary);
-  }
-  #idrop .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  #idrop .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: #1a1a2e;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #idrop .logo-text {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    letter-spacing: -0.3px;
-  }
-  #idrop .logo-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--color-text-tertiary);
-    letter-spacing: 0.5px;
-    margin-top: 1px;
-  }
-  #idrop .gear-btn {
-    background: none;
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: 8px;
-    padding: 6px 8px;
-    cursor: pointer;
-    color: var(--color-text-secondary);
-    font-size: 13px;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  #idrop .gear-btn:hover { background: var(--color-background-secondary); }
-  
-  #idrop .progress-row {
-    display: flex;
-    align-items: center;
-    padding: 14px 24px;
-    gap: 0;
-    border-bottom: 0.5px solid var(--color-border-tertiary);
-    background: var(--color-background-secondary);
-  }
-  #idrop .step-item {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    flex: 1;
-  }
-  #idrop .step-dot {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 500;
-    border: 0.5px solid var(--color-border-secondary);
-    color: var(--color-text-tertiary);
-    background: var(--color-background-primary);
-    transition: all 0.3s;
-    flex-shrink: 0;
-  }
-  #idrop .step-dot.active {
-    background: #1a1a2e;
-    border-color: #1a1a2e;
-    color: #fff;
-  }
-  #idrop .step-dot.done {
-    background: #16a34a;
-    border-color: #16a34a;
-    color: #fff;
-  }
-  #idrop .step-label {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    font-weight: 500;
-    letter-spacing: 0.2px;
-  }
-  #idrop .step-label.active { color: var(--color-text-primary); }
-  #idrop .step-connector {
-    flex: 1;
-    height: 0.5px;
-    background: var(--color-border-tertiary);
-    margin: 0 8px;
-  }
-  #idrop .body { padding: 24px; }
-  
-  #idrop label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  #idrop .field { margin-bottom: 16px; }
-  #idrop input, #idrop select, #idrop textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: 10px;
-    font-size: 14px;
-    font-family: 'Syne', system-ui;
-    background: var(--color-background-primary);
-    color: var(--color-text-primary);
-    transition: border-color 0.15s;
-    outline: none;
-    appearance: none;
-  }
-  #idrop input:focus, #idrop select:focus, #idrop textarea:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79,70,229,0.08);
-  }
-  #idrop textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
-  #idrop .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  
-  #idrop .btn-primary {
-    width: 100%;
-    padding: 12px;
-    background: #1a1a2e;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Syne', system-ui;
-    cursor: pointer;
-    letter-spacing: 0.3px;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 4px;
-  }
-  #idrop .btn-primary:hover { background: #2d2d4e; transform: translateY(-1px); }
-  #idrop .btn-primary:active { transform: scale(0.99); }
-  #idrop .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  
-  #idrop .btn-secondary {
-    flex: 1;
-    padding: 11px;
-    background: var(--color-background-secondary);
-    color: var(--color-text-primary);
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Syne', system-ui;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  #idrop .btn-secondary:hover { background: var(--color-background-tertiary); }
-  
-  #idrop .btn-row { display: flex; gap: 10px; margin-top: 4px; }
-  
-  #idrop .error-msg {
-    font-size: 12px;
-    color: var(--color-text-danger);
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: var(--color-background-danger);
-    border-radius: 8px;
-    border: 0.5px solid var(--color-border-danger);
-  }
-  
-  #idrop .loading-zone {
-    padding: 40px 24px;
-    text-align: center;
-  }
-  #idrop .spinner-ring {
-    width: 48px;
-    height: 48px;
-    border: 2px solid var(--color-border-tertiary);
-    border-top-color: #4f46e5;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  #idrop .loading-text {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    font-weight: 500;
-  }
-  #idrop .loading-sub {
-    font-size: 12px;
-    color: var(--color-text-tertiary);
-    margin-top: 4px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  
-  #idrop .enriched-card {
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 16px;
-  }
-  #idrop .enriched-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-  #idrop .enriched-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    line-height: 1.3;
-  }
-  #idrop .enriched-cat {
-    font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    padding: 4px 8px;
-    background: #eef2ff;
-    color: #4338ca;
-    border-radius: 6px;
-    white-space: nowrap;
-    font-weight: 500;
-  }
-  #idrop .enriched-summary {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 14px;
-  }
-  #idrop .metrics-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  #idrop .metric-box {
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: 10px;
-    padding: 12px;
-  }
-  #idrop .metric-label {
-    font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  #idrop .metric-value {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    line-height: 1;
-  }
-  #idrop .potential-bar {
-    height: 4px;
-    background: var(--color-border-tertiary);
-    border-radius: 2px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-  #idrop .potential-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #4f46e5, #7c3aed);
-    transition: width 1s ease;
-  }
-  #idrop .diff-badge {
-    font-size: 13px;
-    font-weight: 600;
-    padding: 2px 0;
-  }
-  #idrop .diff-easy { color: #16a34a; }
-  #idrop .diff-medium { color: #d97706; }
-  #idrop .diff-hard { color: #dc2626; }
-  
-  #idrop .tags-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  #idrop .tag-pill {
-    font-size: 11px;
-    font-family: 'JetBrains Mono', monospace;
-    padding: 4px 10px;
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: 20px;
-    color: var(--color-text-secondary);
-  }
-  #idrop .insight-box {
-    background: #faf5ff;
-    border: 0.5px solid #ddd6fe;
-    border-radius: 10px;
-    padding: 12px;
-  }
-  #idrop .insight-label {
-    font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    color: #7c3aed;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 5px;
-  }
-  #idrop .insight-text {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-  }
-  #idrop .connections-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  #idrop .conn-chip {
-    font-size: 11px;
-    padding: 4px 10px;
-    background: #f0fdf4;
-    border: 0.5px solid #bbf7d0;
-    border-radius: 20px;
-    color: #15803d;
-  }
-  #idrop .section-micro {
-    font-size: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  
-  #idrop .success-zone {
-    padding: 32px 24px;
-    text-align: center;
-  }
-  #idrop .success-icon {
-    width: 56px;
-    height: 56px;
-    background: #f0fdf4;
-    border: 0.5px solid #bbf7d0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-    font-size: 22px;
-  }
-  #idrop .success-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: 6px;
-  }
-  #idrop .success-sub {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
-  #idrop .notion-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    background: var(--color-background-secondary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: 10px;
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 24px;
-  }
-  
-  #idrop .settings-panel {
-    padding: 20px 24px;
-    border-top: 0.5px solid var(--color-border-tertiary);
-    background: var(--color-background-secondary);
-  }
-  #idrop .settings-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: 4px;
-  }
-  #idrop .settings-desc {
-    font-size: 12px;
-    color: var(--color-text-tertiary);
-    line-height: 1.5;
-    margin-bottom: 12px;
-  }
-  #idrop .webhook-row {
-    display: flex;
-    gap: 8px;
-  }
-  #idrop .webhook-row input {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-  }
-  #idrop .save-btn {
-    padding: 10px 16px;
-    background: #1a1a2e;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: 'Syne', system-ui;
-  }
-  #idrop .saved-msg {
-    font-size: 11px;
-    color: #16a34a;
-    margin-top: 6px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  #idrop .no-webhook-note {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    font-family: 'JetBrains Mono', monospace;
-    margin-top: 6px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-</style>
-
-<div id="idrop">
-  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">IdeaDrop — AI-powered idea capture tool for AI practitioner teams. Submit ideas, get AI enrichment, log to Notion.</h2>
-  <div class="shell" id="main-shell">
-    <!-- Top Bar -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IdeaDrop — AI Practitioner Class</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Syne', system-ui, sans-serif;
+      background: #1a1a1a;
+      color: #e8e7e1;
+      min-height: 100vh;
+      padding: 24px 16px 40px;
+    }
+    .shell {
+      max-width: 540px;
+      margin: 0 auto;
+      background: #2c2c2a;
+      border: 0.5px solid #444441;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 0.5px solid #444441;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #e8e7e1;
+      letter-spacing: -0.3px;
+    }
+    .logo-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #888780;
+      letter-spacing: 0.5px;
+      margin-top: 1px;
+    }
+    .gear-btn {
+      background: none;
+      border: 0.5px solid #444441;
+      border-radius: 8px;
+      padding: 6px 8px;
+      cursor: pointer;
+      color: #b4b2a9;
+      font-size: 13px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .gear-btn:hover { background: #444441; }
+    
+    .progress-row {
+      display: flex;
+      align-items: center;
+      padding: 14px 24px;
+      gap: 0;
+      border-bottom: 0.5px solid #444441;
+      background: #2c2c2a;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex: 1;
+    }
+    .step-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      border: 0.5px solid #5f5e5a;
+      color: #888780;
+      background: #2c2c2a;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .step-dot.active {
+      background: #f59e0b;
+      border-color: #f59e0b;
+      color: #1a1a1a;
+    }
+    .step-dot.done {
+      background: #16a34a;
+      border-color: #16a34a;
+      color: #fff;
+    }
+    .step-label {
+      font-size: 11px;
+      color: #888780;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .step-label.active { color: #e8e7e1; }
+    .step-connector {
+      flex: 1;
+      height: 0.5px;
+      background: #444441;
+      margin: 0 8px;
+    }
+    .body { padding: 24px; }
+    
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #b4b2a9;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .field { margin-bottom: 16px; }
+    input[type="text"], input[type="url"], select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 0.5px solid #5f5e5a;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Syne', system-ui;
+      background: #2c2c2a;
+      color: #e8e7e1;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+      appearance: none;
+    }
+    input[type="text"]:focus, input[type="url"]:focus, select:focus, textarea:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
+    .file-upload-zone {
+      border: 1.5px dashed #5f5e5a;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #1a1a1a;
+    }
+    .file-upload-zone:hover {
+      border-color: #f59e0b;
+      background: #2c2c2a;
+    }
+    .file-upload-zone.has-file {
+      border-color: #16a34a;
+      background: #1a2820;
+    }
+    .upload-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      opacity: 0.5;
+    }
+    .upload-text {
+      font-size: 13px;
+      color: #888780;
+      margin-bottom: 4px;
+    }
+    .upload-subtext {
+      font-size: 11px;
+      color: #5f5e5a;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+    .file-name {
+      font-size: 13px;
+      color: #16a34a;
+      font-weight: 500;
+    }
+    .file-size {
+      font-size: 11px;
+      color: #888780;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .remove-file {
+      background: none;
+      border: none;
+      color: #dc2626;
+      cursor: pointer;
+      padding: 4px;
+      font-size: 16px;
+    }
+    input[type="file"] { display: none; }
+    
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Syne', system-ui;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    
+    .btn-secondary {
+      flex: 1;
+      padding: 11px;
+      background: #444441;
+      color: #e8e7e1;
+      border: 0.5px solid #5f5e5a;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Syne', system-ui;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { background: #5f5e5a; }
+    
+    .btn-row { display: flex; gap: 10px; margin-top: 4px; }
+    
+    .error-msg {
+      font-size: 12px;
+      color: #fca5a5;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: #3f1f1f;
+      border-radius: 8px;
+      border: 0.5px solid #dc2626;
+    }
+    
+    .loading-zone {
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .spinner-ring {
+      width: 48px;
+      height: 48px;
+      border: 2px solid #444441;
+      border-top-color: #f59e0b;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      font-size: 14px;
+      color: #b4b2a9;
+      font-weight: 500;
+    }
+    .loading-sub {
+      font-size: 12px;
+      color: #888780;
+      margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .enriched-card {
+      background: #2c2c2a;
+      border: 0.5px solid #444441;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .enriched-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .enriched-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e8e7e1;
+      line-height: 1.3;
+    }
+    .enriched-cat {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 8px;
+      background: #2d2d3f;
+      color: #a5b4fc;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .enriched-summary {
+      font-size: 13px;
+      color: #b4b2a9;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric-box {
+      background: #444441;
+      border: 0.5px solid #5f5e5a;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .metric-label {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #888780;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #e8e7e1;
+      line-height: 1;
+    }
+    .potential-bar {
+      height: 4px;
+      background: #444441;
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .potential-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      transition: width 1s ease;
+    }
+    .diff-badge {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 2px 0;
+    }
+    .diff-easy { color: #4ade80; }
+    .diff-medium { color: #fbbf24; }
+    .diff-hard { color: #f87171; }
+    
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .tag-pill {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px;
+      background: #444441;
+      border: 0.5px solid #5f5e5a;
+      border-radius: 20px;
+      color: #b4b2a9;
+    }
+    .insight-box {
+      background: #2d2d3f;
+      border: 0.5px solid #4c4560;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .insight-label {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #a78bfa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    .insight-text {
+      font-size: 13px;
+      color: #b4b2a9;
+      line-height: 1.6;
+    }
+    .connections-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .conn-chip {
+      font-size: 11px;
+      padding: 4px 10px;
+      background: #1a2820;
+      border: 0.5px solid #166534;
+      border-radius: 20px;
+      color: #4ade80;
+    }
+    .section-micro {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #888780;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .attachment-preview {
+      background: #444441;
+      border: 0.5px solid #5f5e5a;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .attachment-icon {
+      font-size: 20px;
+    }
+    .attachment-info {
+      flex: 1;
+    }
+    .attachment-name {
+      font-size: 12px;
+      color: #e8e7e1;
+      font-weight: 500;
+    }
+    .attachment-meta {
+      font-size: 10px;
+      color: #888780;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+    
+    .success-zone {
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: #1a2820;
+      border: 0.5px solid #166534;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 22px;
+      color: #4ade80;
+    }
+    .success-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e8e7e1;
+      margin-bottom: 6px;
+    }
+    .success-sub {
+      font-size: 13px;
+      color: #b4b2a9;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .notion-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #444441;
+      border: 0.5px solid #5f5e5a;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #b4b2a9;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 24px;
+    }
+    
+    .settings-panel {
+      padding: 20px 24px;
+      border-top: 0.5px solid #444441;
+      background: #2c2c2a;
+    }
+    .settings-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e8e7e1;
+      margin-bottom: 4px;
+    }
+    .settings-desc {
+      font-size: 12px;
+      color: #888780;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .webhook-row {
+      display: flex;
+      gap: 8px;
+    }
+    .webhook-row input {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+    .save-btn {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Syne', system-ui;
+    }
+    .saved-msg {
+      font-size: 11px;
+      color: #4ade80;
+      margin-top: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .no-webhook-note {
+      font-size: 11px;
+      color: #888780;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
     <div class="top-bar">
       <div class="logo">
         <div class="logo-icon">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L10.5 6.5L15 7.5L11.5 11L12.5 15.5L8 13L3.5 15.5L4.5 11L1 7.5L5.5 6.5L8 2Z" fill="#f59e0b" stroke="#f59e0b" stroke-width="0.5" stroke-linejoin="round"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L10.5 6.5L15 7.5L11.5 11L12.5 15.5L8 13L3.5 15.5L4.5 11L1 7.5L5.5 6.5L8 2Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="0.5" stroke-linejoin="round"/></svg>
         </div>
         <div>
           <div class="logo-text">IdeaDrop</div>
@@ -484,8 +576,7 @@
       </button>
     </div>
 
-    <!-- Progress Steps -->
-    <div class="progress-row" id="progress-row">
+    <div class="progress-row">
       <div class="step-item">
         <div class="step-dot active" id="dot1">1</div>
         <span class="step-label active" id="lbl1">Submit</span>
@@ -502,7 +593,6 @@
       </div>
     </div>
 
-    <!-- FORM STATE -->
     <div id="view-form" class="body">
       <div id="err-msg" class="error-msg" style="display:none"></div>
       <div class="row2">
@@ -533,20 +623,36 @@
         <label>Describe your idea</label>
         <textarea id="f-desc" placeholder="What's the idea? What problem does it solve? What makes it interesting?"></textarea>
       </div>
+      <div class="field">
+        <label>Attach files (optional)</label>
+        <div class="file-upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+          <div id="upload-prompt">
+            <div class="upload-icon">📎</div>
+            <div class="upload-text">Click to attach files</div>
+            <div class="upload-subtext">PowerPoint, PDF, images, docs (max 10MB)</div>
+          </div>
+          <div id="file-display" style="display:none">
+            <div class="file-info">
+              <span class="file-name" id="file-name"></span>
+              <span class="file-size" id="file-size"></span>
+              <button class="remove-file" onclick="removeFile(event)">×</button>
+            </div>
+          </div>
+        </div>
+        <input type="file" id="file-input" accept=".ppt,.pptx,.pdf,.doc,.docx,.jpg,.jpeg,.png,.gif" onchange="handleFile(this.files[0])" />
+      </div>
       <button class="btn-primary" onclick="enrichIdea()">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 1z" transform="rotate(45 8 8)"/><path d="M5.5 7.5l5-3-3 5-2-2z"/></svg>
         Enrich with AI
       </button>
     </div>
 
-    <!-- LOADING STATE -->
     <div id="view-loading" class="loading-zone" style="display:none">
       <div class="spinner-ring"></div>
       <div class="loading-text">Claude is enriching your idea</div>
-      <div class="loading-sub" id="loading-dots">analyzing<span id="ldots">...</span></div>
+      <div class="loading-sub">analyzing<span id="ldots">...</span></div>
     </div>
 
-    <!-- PREVIEW STATE -->
     <div id="view-preview" class="body" style="display:none">
       <div class="enriched-card">
         <div class="enriched-header">
@@ -574,6 +680,7 @@
           <div class="insight-text" id="prev-insight"></div>
         </div>
       </div>
+      <div id="attachment-preview" style="display:none"></div>
       <div class="btn-row">
         <button class="btn-secondary" onclick="goBack()">← Edit</button>
         <button class="btn-primary" id="log-btn" onclick="logToNotion()" style="flex:2">
@@ -582,7 +689,6 @@
       </div>
     </div>
 
-    <!-- SUCCESS STATE -->
     <div id="view-success" class="success-zone" style="display:none">
       <div class="success-icon">✓</div>
       <div class="success-title">Idea logged!</div>
@@ -596,7 +702,6 @@
       </button>
     </div>
 
-    <!-- SETTINGS PANEL -->
     <div id="settings-panel" class="settings-panel" style="display:none">
       <div class="settings-title">Make.com Webhook URL</div>
       <div class="settings-desc">Paste your Make.com webhook URL to push ideas directly to Notion. Leave blank to use demo mode only.</div>
@@ -610,158 +715,258 @@
       </div>
     </div>
   </div>
-</div>
 
-<script>
-let enrichedData = null;
-let webhookUrl = "";
-
-function setStep(step) {
-  ["form","loading","preview","success"].forEach(s => {
-    document.getElementById("view-" + s).style.display = "none";
-  });
-  document.getElementById("view-" + step).style.display = step === "loading" ? "block" : "block";
-  updateProgress(step);
-}
-
-function updateProgress(step) {
-  const stepMap = { form: 1, loading: 2, preview: 2, success: 3 };
-  const current = stepMap[step] || 1;
-  [1,2,3].forEach(i => {
-    const dot = document.getElementById("dot" + i);
-    const lbl = document.getElementById("lbl" + i);
-    dot.className = "step-dot" + (i < current ? " done" : i === current ? " active" : "");
-    dot.textContent = i < current ? "✓" : i;
-    lbl.className = "step-label" + (i === current ? " active" : "");
-  });
-}
-
-function toggleSettings() {
-  const p = document.getElementById("settings-panel");
-  p.style.display = p.style.display === "none" ? "block" : "none";
-}
-
-function saveWebhook() {
-  webhookUrl = document.getElementById("webhook-input").value.trim();
-  document.getElementById("saved-msg").style.display = webhookUrl ? "block" : "none";
-  document.getElementById("demo-note").style.display = webhookUrl ? "none" : "flex";
-  setTimeout(() => document.getElementById("saved-msg").style.display = "none", 2000);
-}
-
-function showError(msg) {
-  const el = document.getElementById("err-msg");
-  el.textContent = msg;
-  el.style.display = "block";
-  setTimeout(() => el.style.display = "none", 3500);
-}
-
-async function enrichIdea() {
-  const name = document.getElementById("f-name").value.trim();
-  const title = document.getElementById("f-title").value.trim();
-  const desc = document.getElementById("f-desc").value.trim();
-  const cat = document.getElementById("f-cat").value;
-  if (!name || !title || !desc || !cat) { showError("Please fill in all fields."); return; }
-
-  setStep("loading");
-  let dots = 0;
-  const iv = setInterval(() => {
-    dots = (dots + 1) % 4;
-    document.getElementById("ldots").textContent = ".".repeat(dots + 1);
-  }, 400);
-
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: `You are an AI research analyst for an AI practitioner class. Analyze the idea and return ONLY a raw JSON object — no markdown fences, no explanation. Schema: {"summary":"2 concise sentences explaining the idea and its value","tags":["tag1","tag2","tag3","tag4"],"potential":85,"difficulty":"Medium","connections":["related concept 1","related concept 2","related concept 3"],"insight":"One powerful insight about what makes this idea interesting or what it could unlock"}. potential is integer 0-100. difficulty must be exactly: Easy, Medium, or Hard.`,
-        messages: [{ role: "user", content: `Category: ${cat}\nIdea: ${title}\nDescription: ${desc}` }]
-      })
-    });
-    clearInterval(iv);
-    const data = await res.json();
-    const raw = data.content[0].text.replace(/```json|```/g, "").trim();
-    enrichedData = JSON.parse(raw);
+  <script>
+    let enrichedData = null;
+    let webhookUrl = localStorage.getItem('ideadrop_webhook') || "";
+    let attachedFile = null;
     
-    document.getElementById("prev-title").textContent = title;
-    document.getElementById("prev-cat").textContent = cat;
-    document.getElementById("prev-summary").textContent = enrichedData.summary;
-    document.getElementById("prev-potential").textContent = enrichedData.potential + "/100";
-    document.getElementById("prev-bar").style.width = enrichedData.potential + "%";
-    
-    const diffEl = document.getElementById("prev-difficulty");
-    diffEl.textContent = enrichedData.difficulty;
-    diffEl.className = "metric-value diff-badge diff-" + enrichedData.difficulty.toLowerCase();
-    
-    const tagsEl = document.getElementById("prev-tags");
-    tagsEl.innerHTML = enrichedData.tags.map(t => `<span class="tag-pill">${t}</span>`).join("");
-    
-    const connsEl = document.getElementById("prev-conns");
-    connsEl.innerHTML = enrichedData.connections.map(c => `<span class="conn-chip">${c}</span>`).join("");
-    
-    document.getElementById("prev-insight").textContent = enrichedData.insight;
-    setStep("preview");
-  } catch(e) {
-    clearInterval(iv);
-    showError("Enrichment failed. Please try again.");
-    setStep("form");
-  }
-}
+    // Load saved webhook on page load
+    if (webhookUrl) {
+      document.getElementById("webhook-input").value = webhookUrl;
+      document.getElementById("demo-note").style.display = "none";
+    }
 
-function goBack() {
-  setStep("form");
-}
+    function handleFile(file) {
+      if (!file) return;
+      
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        showError("File too large. Please keep files under 10MB.");
+        return;
+      }
+      
+      attachedFile = file;
+      const zone = document.getElementById("upload-zone");
+      zone.classList.add("has-file");
+      document.getElementById("upload-prompt").style.display = "none";
+      document.getElementById("file-display").style.display = "block";
+      document.getElementById("file-name").textContent = file.name;
+      document.getElementById("file-size").textContent = formatFileSize(file.size);
+    }
 
-async function logToNotion() {
-  const btn = document.getElementById("log-btn");
-  btn.textContent = "Sending...";
-  btn.disabled = true;
-  
-  const name = document.getElementById("f-name").value.trim();
-  const title = document.getElementById("f-title").value.trim();
-  const desc = document.getElementById("f-desc").value.trim();
-  const cat = document.getElementById("f-cat").value;
-  
-  const payload = {
-    submitted_by: name, title, description: desc, category: cat,
-    ai_summary: enrichedData.summary,
-    ai_tags: enrichedData.tags.join(", "),
-    potential_score: enrichedData.potential,
-    difficulty: enrichedData.difficulty,
-    connections: enrichedData.connections.join(", "),
-    key_insight: enrichedData.insight,
-    submitted_at: new Date().toISOString()
-  };
-  
-  let notionLogged = false;
-  if (webhookUrl) {
-    try {
-      await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+    function removeFile(e) {
+      e.stopPropagation();
+      attachedFile = null;
+      const zone = document.getElementById("upload-zone");
+      zone.classList.remove("has-file");
+      document.getElementById("upload-prompt").style.display = "block";
+      document.getElementById("file-display").style.display = "none";
+      document.getElementById("file-input").value = "";
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function setStep(step) {
+      ["form","loading","preview","success"].forEach(s => {
+        document.getElementById("view-" + s).style.display = "none";
       });
-      notionLogged = true;
-    } catch {}
-  }
-  
-  document.getElementById("succ-msg").textContent = notionLogged
-    ? `"${title}" has been AI-enriched and logged to your team's Notion database.`
-    : `"${title}" was AI-enriched. Connect a webhook to auto-log to Notion.`;
-  document.getElementById("succ-notion-text").textContent = notionLogged ? "logged to notion ✓" : "demo mode — add webhook to sync";
-  
-  btn.disabled = false;
-  setStep("success");
-}
+      document.getElementById("view-" + step).style.display = "block";
+      updateProgress(step);
+    }
 
-function reset() {
-  document.getElementById("f-name").value = "";
-  document.getElementById("f-title").value = "";
-  document.getElementById("f-desc").value = "";
-  document.getElementById("f-cat").value = "";
-  enrichedData = null;
-  setStep("form");
-}
-</script>
+    function updateProgress(step) {
+      const stepMap = { form: 1, loading: 2, preview: 2, success: 3 };
+      const current = stepMap[step] || 1;
+      [1,2,3].forEach(i => {
+        const dot = document.getElementById("dot" + i);
+        const lbl = document.getElementById("lbl" + i);
+        dot.className = "step-dot" + (i < current ? " done" : i === current ? " active" : "");
+        dot.textContent = i < current ? "✓" : i;
+        lbl.className = "step-label" + (i === current ? " active" : "");
+      });
+    }
+
+    function toggleSettings() {
+      const p = document.getElementById("settings-panel");
+      p.style.display = p.style.display === "none" ? "block" : "none";
+    }
+
+    function saveWebhook() {
+      webhookUrl = document.getElementById("webhook-input").value.trim();
+      localStorage.setItem('ideadrop_webhook', webhookUrl);
+      document.getElementById("saved-msg").style.display = webhookUrl ? "block" : "none";
+      document.getElementById("demo-note").style.display = webhookUrl ? "none" : "flex";
+      setTimeout(() => document.getElementById("saved-msg").style.display = "none", 2000);
+    }
+
+    function showError(msg) {
+      const el = document.getElementById("err-msg");
+      el.textContent = msg;
+      el.style.display = "block";
+      setTimeout(() => el.style.display = "none", 3500);
+    }
+
+    async function enrichIdea() {
+      const name = document.getElementById("f-name").value.trim();
+      const title = document.getElementById("f-title").value.trim();
+      const desc = document.getElementById("f-desc").value.trim();
+      const cat = document.getElementById("f-cat").value;
+      if (!name || !title || !desc || !cat) { showError("Please fill in all fields."); return; }
+
+      setStep("loading");
+      let dots = 0;
+      const iv = setInterval(() => {
+        dots = (dots + 1) % 4;
+        document.getElementById("ldots").textContent = ".".repeat(dots + 1);
+      }, 400);
+
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "x-api-key": "YOUR_ANTHROPIC_API_KEY_HERE",
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 1000,
+            system: `You are an AI research analyst for an AI practitioner class. Analyze the idea and return ONLY a raw JSON object — no markdown fences, no explanation. Schema: {"summary":"2 concise sentences explaining the idea and its value","tags":["tag1","tag2","tag3","tag4"],"potential":85,"difficulty":"Medium","connections":["related concept 1","related concept 2","related concept 3"],"insight":"One powerful insight about what makes this idea interesting or what it could unlock"}. potential is integer 0-100. difficulty must be exactly: Easy, Medium, or Hard.`,
+            messages: [{ role: "user", content: `Category: ${cat}\nIdea: ${title}\nDescription: ${desc}` }]
+          })
+        });
+        clearInterval(iv);
+        const data = await res.json();
+        const raw = data.content[0].text.replace(/```json|```/g, "").trim();
+        enrichedData = JSON.parse(raw);
+        
+        document.getElementById("prev-title").textContent = title;
+        document.getElementById("prev-cat").textContent = cat;
+        document.getElementById("prev-summary").textContent = enrichedData.summary;
+        document.getElementById("prev-potential").textContent = enrichedData.potential + "/100";
+        document.getElementById("prev-bar").style.width = enrichedData.potential + "%";
+        
+        const diffEl = document.getElementById("prev-difficulty");
+        diffEl.textContent = enrichedData.difficulty;
+        diffEl.className = "metric-value diff-badge diff-" + enrichedData.difficulty.toLowerCase();
+        
+        const tagsEl = document.getElementById("prev-tags");
+        tagsEl.innerHTML = enrichedData.tags.map(t => `<span class="tag-pill">${t}</span>`).join("");
+        
+        const connsEl = document.getElementById("prev-conns");
+        connsEl.innerHTML = enrichedData.connections.map(c => `<span class="conn-chip">${c}</span>`).join("");
+        
+        document.getElementById("prev-insight").textContent = enrichedData.insight;
+        
+        // Show attachment preview if file exists
+        if (attachedFile) {
+          const preview = document.getElementById("attachment-preview");
+          const icon = getFileIcon(attachedFile.type);
+          preview.innerHTML = `
+            <div class="attachment-preview">
+              <div class="attachment-icon">${icon}</div>
+              <div class="attachment-info">
+                <div class="attachment-name">${attachedFile.name}</div>
+                <div class="attachment-meta">${formatFileSize(attachedFile.size)} • Will be sent to Notion</div>
+              </div>
+            </div>
+          `;
+          preview.style.display = "block";
+        } else {
+          document.getElementById("attachment-preview").style.display = "none";
+        }
+        
+        setStep("preview");
+      } catch(e) {
+        clearInterval(iv);
+        showError("Enrichment failed. Check your API key and try again.");
+        setStep("form");
+      }
+    }
+
+    function getFileIcon(type) {
+      if (type.includes('powerpoint') || type.includes('presentation')) return '📊';
+      if (type.includes('pdf')) return '📄';
+      if (type.includes('word') || type.includes('document')) return '📝';
+      if (type.includes('image')) return '🖼️';
+      return '📎';
+    }
+
+    function goBack() {
+      setStep("form");
+    }
+
+    async function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function logToNotion() {
+      const btn = document.getElementById("log-btn");
+      btn.textContent = "Sending...";
+      btn.disabled = true;
+      
+      const name = document.getElementById("f-name").value.trim();
+      const title = document.getElementById("f-title").value.trim();
+      const desc = document.getElementById("f-desc").value.trim();
+      const cat = document.getElementById("f-cat").value;
+      
+      const payload = {
+        submitted_by: name, 
+        title, 
+        description: desc, 
+        category: cat,
+        ai_summary: enrichedData.summary,
+        ai_tags: enrichedData.tags.join(", "),
+        potential_score: enrichedData.potential,
+        difficulty: enrichedData.difficulty,
+        connections: enrichedData.connections.join(", "),
+        key_insight: enrichedData.insight,
+        submitted_at: new Date().toISOString()
+      };
+      
+      // Add file data if exists
+      if (attachedFile) {
+        const base64 = await fileToBase64(attachedFile);
+        payload.attachment = {
+          filename: attachedFile.name,
+          size: attachedFile.size,
+          type: attachedFile.type,
+          data: base64
+        };
+      }
+      
+      let notionLogged = false;
+      if (webhookUrl) {
+        try {
+          await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          notionLogged = true;
+        } catch(e) {
+          console.error("Webhook failed:", e);
+        }
+      }
+      
+      document.getElementById("succ-msg").textContent = notionLogged
+        ? `"${title}" has been AI-enriched and logged to your team's Notion database${attachedFile ? ' with attachment' : ''}.`
+        : `"${title}" was AI-enriched. Connect a webhook to auto-log to Notion.`;
+      document.getElementById("succ-notion-text").textContent = notionLogged ? "logged to notion ✓" : "demo mode — add webhook to sync";
+      
+      btn.disabled = false;
+      setStep("success");
+    }
+
+    function reset() {
+      document.getElementById("f-name").value = "";
+      document.getElementById("f-title").value = "";
+      document.getElementById("f-desc").value = "";
+      document.getElementById("f-cat").value = "";
+      removeFile(new Event('click'));
+      enrichedData = null;
+      setStep("form");
+    }
+  </script>
+</body>
+</html>
