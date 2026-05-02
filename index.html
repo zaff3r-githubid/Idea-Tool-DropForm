@@ -426,13 +426,18 @@
   </div>
 
   <script>
-    let webhookUrl = localStorage.getItem('ideadrop_webhook') || "";
+    const WEBHOOK_URL = "https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp";  // Your actual webhook
+    let webhookUrl = WEBHOOK_URL;
     let attachedFile = null;
     
-    if (webhookUrl) {
-      document.getElementById("webhook-input").value = webhookUrl;
-      document.getElementById("demo-note").style.display = "none";
-    }
+    // Hide webhook settings if configured
+    if (WEBHOOK_URL && WEBHOOK_URL !== "") {
+      const settingsPanel = document.getElementById("settings-panel");
+      const webhookBtn = document.querySelector(".gear-btn");
+      if (settingsPanel) settingsPanel.style.display = "none";
+      if (webhookBtn) webhookBtn.style.display = "none";
+      }
+    
 
     function handleFile(file) {
       if (!file) return;
