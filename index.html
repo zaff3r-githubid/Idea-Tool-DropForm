@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ai ToolBox — AI Practitioner Class</title>
+  <title>AI Intelligence Stack — AI Practitioner Class</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -105,6 +105,37 @@
     }
     textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
+    /* Checkbox styling */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      border: 0.5px solid #5f5e5a;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #f59e0b;
+    }
+    .checkbox-item label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #e8e7e1;
+      text-transform: none;
+      letter-spacing: 0;
+      margin: 0;
+      cursor: pointer;
+    }
     
     .file-upload-zone {
       border: 1.5px dashed #5f5e5a;
@@ -328,7 +359,7 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L10.5 6.5L15 7.5L11.5 11L12.5 15.5L8 13L3.5 15.5L4.5 11L1 7.5L5.5 6.5L8 2Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="0.5" stroke-linejoin="round"/></svg>
         </div>
         <div>
-          <div class="logo-text">Ai Intelligence Stack</div>
+          <div class="logo-text">AI Intelligence Stack</div>
           <div class="logo-sub">AI PRACTITIONER CLASS</div>
         </div>
       </div>
@@ -360,6 +391,19 @@
           </select>
         </div>
       </div>
+      
+      <div class="field">
+        <label>Expected Impact</label>
+        <select id="f-impact">
+          <option value="">Select expected impact...</option>
+          <option>Team Efficiency</option>
+          <option>Cost Reduction</option>
+          <option>New Capability</option>
+          <option>Research Insight</option>
+          <option>Customer Value</option>
+        </select>
+      </div>
+      
       <div class="field">
         <label>Idea title</label>
         <input type="text" id="f-title" placeholder="A short, punchy title for your idea" />
@@ -368,6 +412,33 @@
         <label>Describe your idea</label>
         <textarea id="f-desc" placeholder="What's the idea? What problem does it solve? What makes it interesting?"></textarea>
       </div>
+      
+      <div class="field">
+        <label>Resources Needed</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="res-compute" value="Computing Power">
+            <label for="res-compute">Computing Power</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="res-budget" value="Budget">
+            <label for="res-budget">Budget</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="res-time" value="Team Time">
+            <label for="res-time">Team Time</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="res-data" value="External Data">
+            <label for="res-data">External Data</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="res-research" value="Research Access">
+            <label for="res-research">Research Access</label>
+          </div>
+        </div>
+      </div>
+      
       <div class="field">
         <label>Attach files (optional)</label>
         <div class="file-upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
@@ -426,7 +497,7 @@
   </div>
 
   <script>
-    const WEBHOOK_URL = "https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp";  // Your actual webhook
+    const WEBHOOK_URL = "https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp";
     let webhookUrl = WEBHOOK_URL;
     let attachedFile = null;
     
@@ -436,8 +507,7 @@
       const webhookBtn = document.querySelector(".gear-btn");
       if (settingsPanel) settingsPanel.style.display = "none";
       if (webhookBtn) webhookBtn.style.display = "none";
-      }
-    
+    }
 
     function handleFile(file) {
       if (!file) return;
@@ -497,6 +567,16 @@
       setTimeout(() => el.style.display = "none", 3500);
     }
 
+    function getSelectedResources() {
+      const resources = [];
+      if (document.getElementById("res-compute").checked) resources.push("Computing Power");
+      if (document.getElementById("res-budget").checked) resources.push("Budget");
+      if (document.getElementById("res-time").checked) resources.push("Team Time");
+      if (document.getElementById("res-data").checked) resources.push("External Data");
+      if (document.getElementById("res-research").checked) resources.push("Research Access");
+      return resources;
+    }
+
     async function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -511,9 +591,11 @@
       const title = document.getElementById("f-title").value.trim();
       const desc = document.getElementById("f-desc").value.trim();
       const cat = document.getElementById("f-cat").value;
+      const impact = document.getElementById("f-impact").value;
+      const resources = getSelectedResources();
       
       if (!name || !title || !desc || !cat) { 
-        showError("Please fill in all fields."); 
+        showError("Please fill in all required fields (name, category, title, description)."); 
         return; 
       }
 
@@ -536,6 +618,8 @@
           title, 
           description: desc, 
           category: cat,
+          expected_impact: impact || "Not specified",
+          resources_needed: resources.length > 0 ? resources.join(", ") : "None specified",
           submitted_at: new Date().toISOString()
         };
         
@@ -549,21 +633,19 @@
           };
         }
 
-        await fetch(webhookUrl, {
+        await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
 
         clearInterval(iv);
-        document.getElementById("succ-msg").textContent = attachedFile 
-          ? `"${title}" submitted with attachment. AI enrichment happening in Make.com!`
-          : `"${title}" submitted successfully. AI enrichment happening in Make.com!`;
+        document.getElementById("succ-msg").textContent = `"${title}" submitted successfully. AI enrichment happening in Make.com!`;
         document.getElementById("succ-notion-text").textContent = "processing in make.com";
         setStep("success");
       } catch(e) {
         clearInterval(iv);
-        showError("Submission failed. Check your webhook URL.");
+        showError("Submission failed. Check your connection.");
         setStep("form");
       }
     }
@@ -573,6 +655,12 @@
       document.getElementById("f-title").value = "";
       document.getElementById("f-desc").value = "";
       document.getElementById("f-cat").value = "";
+      document.getElementById("f-impact").value = "";
+      document.getElementById("res-compute").checked = false;
+      document.getElementById("res-budget").checked = false;
+      document.getElementById("res-time").checked = false;
+      document.getElementById("res-data").checked = false;
+      document.getElementById("res-research").checked = false;
       removeFile(new Event('click'));
       setStep("form");
     }
