@@ -625,12 +625,12 @@
         
         if (attachedFile) {
           const base64 = await fileToBase64(attachedFile);
-          payload.attachment = {
-            filename: attachedFile.name,
+          payload.attachment = [{
+            name: attachedFile.name,
             size: attachedFile.size,
             type: attachedFile.type,
             data: base64
-          };
+          }];
         }
 
         await fetch(WEBHOOK_URL, {
