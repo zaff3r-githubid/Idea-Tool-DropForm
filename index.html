@@ -349,6 +349,47 @@
       align-items: center;
       gap: 4px;
     }
+    /* Notion Database Link Button */
+    .notion-link-container {
+      margin-top: 24px;
+      padding: 20px;
+      border: 1px solid #5f5e5a;
+      border-radius: 12px;
+      background: rgba(44, 44, 42, 0.5);
+      text-align: center;
+    }
+
+    .notion-link-label {
+      color: #b4b2a9;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .notion-link-btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: linear-gradient(135deg, #444441, #5f5e5a);
+      color: #e8e7e1;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      border: 1px solid #7a7977;
+    }
+
+    .notion-link-btn:hover {
+      background: linear-gradient(135deg, #5f5e5a, #7a7977);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .notion-link-btn:active {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -461,8 +502,16 @@
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 1z" transform="rotate(45 8 8)"/><path d="M5.5 7.5l5-3-3 5-2-2z"/></svg>
         Submit Idea
       </button>
+      <!-- Notion Database Link -->
+      <div class="notion-link-container">
+        <div class="notion-link-label">View All Submitted Ideas:</div>
+        <a href="https://www.notion.so/3549e1d7001f80219febf590a8c07a6d?v=9a6aa4adc2be477aa5f9167587aae8e1&source=copy_link" 
+           target="_blank" 
+           class="notion-link-btn">
+          📊 AI Tools Database
+       </a>
+      </div>
     </div>
-
     <div id="view-loading" class="loading-zone" style="display:none">
       <div class="spinner-ring"></div>
       <div class="loading-text">Processing your idea</div>
