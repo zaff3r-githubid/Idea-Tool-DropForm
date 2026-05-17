@@ -825,17 +825,22 @@ function resetForm() {
     setTimeout(() => successOverlay.remove(), 300);
   }
   
-  // Hide YOUR success page (adjust selector based on your HTML)
-  const yourSuccessPage = document.querySelector('.success-container'); // Change this selector!
-  if (yourSuccessPage) {
-    yourSuccessPage.style.display = 'none';
-  }
+  // Try to find and hide success page (multiple attempts)
+  // Method 1: By common class names
+  const successByClass = document.querySelector('.success, .success-page, .success-container, .submitted');
+  if (successByClass) successByClass.style.display = 'none';
   
-  // Show the form again
-  const formContainer = document.querySelector('.form-container'); // Change this selector!
-  if (formContainer) {
-    formContainer.style.display = 'block';
-  }
+  // Method 2: Find element with "submitted" or "success" text
+  const allDivs = document.querySelectorAll('div');
+  allDivs.forEach(div => {
+    if (div.textContent.includes('Idea submitted') || div.textContent.includes('processing in make.com')) {
+      div.style.display = 'none';
+    }
+  });
+  
+  // Show the form again - find the main shell
+  const shell = document.querySelector('.shell');
+  if (shell) shell.style.display = 'block';
   
   // Clear all form fields
   document.getElementById("f-name").value = "";
@@ -855,11 +860,16 @@ function resetForm() {
   
   // Reset button
   const submitBtn = document.querySelector('.submit-btn');
-  submitBtn.textContent = "Submit Idea";
-  submitBtn.disabled = false;
+  if (submitBtn) {
+    submitBtn.textContent = "Submit Idea";
+    submitBtn.disabled = false;
+  }
   
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // Force a page refresh to reset state
+  location.reload();
 }
 
     function reset() {
