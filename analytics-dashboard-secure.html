@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Intelligence Stack - Analytics Dashboard</title>
-  <link href="analytics-dashboard-secure_files/css2.css" rel="stylesheet">
-  <script src="analytics-dashboard-secure_files/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
@@ -213,20 +213,20 @@
       <p>Real-time insights from Notion database</p>
     </div>
     
-    <div id="loading" class="loading" style="display: none;">
+    <div id="loading" class="loading">
       <div class="spinner"></div>
       <div>Loading analytics from Make.com...</div>
     </div>
     
-    <div id="dashboard" style="display: block;">
+    <div id="dashboard" style="display: none;">
       <!-- Stats Cards -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-value" id="stat-total">3</div>
+          <div class="stat-value" id="stat-total">0</div>
           <div class="stat-label">Total Ideas</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="stat-avg">0.0</div>
+          <div class="stat-value" id="stat-avg">0</div>
           <div class="stat-label">Average Score</div>
         </div>
         <div class="stat-card">
@@ -243,11 +243,11 @@
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-title">Score Distribution</div>
-          <canvas id="scoreChart" style="display: block; box-sizing: border-box; height: 269px; width: 538px;" height="269" width="538"></canvas>
+          <canvas id="scoreChart"></canvas>
         </div>
         <div class="chart-card">
           <div class="chart-title">Ideas by Category</div>
-          <canvas id="categoryChart" style="display: block; box-sizing: border-box; height: 538px; width: 538px;" height="538" width="538"></canvas>
+          <canvas id="categoryChart"></canvas>
         </div>
       </div>
       
@@ -264,25 +264,9 @@
               <th>Submitted</th>
             </tr>
           </thead>
-          <tbody id="recentTable"><tr>
-          <td>Untitled</td>
-          <td>Uncategorized</td>
-          <td><span class="score-badge score-low">0</span></td>
-          <td>N/A</td>
-          <td>N/A</td>
-        </tr><tr>
-          <td>Untitled</td>
-          <td>Uncategorized</td>
-          <td><span class="score-badge score-low">0</span></td>
-          <td>N/A</td>
-          <td>N/A</td>
-        </tr><tr>
-          <td>Untitled</td>
-          <td>Uncategorized</td>
-          <td><span class="score-badge score-low">0</span></td>
-          <td>N/A</td>
-          <td>N/A</td>
-        </tr></tbody>
+          <tbody id="recentTable">
+            <!-- Will be populated by JavaScript -->
+          </tbody>
         </table>
       </div>
       
@@ -298,7 +282,9 @@
               <th>Submitted By</th>
             </tr>
           </thead>
-          <tbody id="topTable"><tr><td colspan="4" style="text-align: center; color: #888780;">No ideas scoring 80+ yet</td></tr></tbody>
+          <tbody id="topTable">
+            <!-- Will be populated by JavaScript -->
+          </tbody>
         </table>
       </div>
     </div>
@@ -632,6 +618,5 @@
     // Load data on page load
     window.addEventListener('load', loadData);
   </script>
-
-
-</body></html>
+</body>
+</html>
