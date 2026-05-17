@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Intelligence Stack - Analytics Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link href="analytics-dashboard-secure_files/css2.css" rel="stylesheet">
+  <script src="analytics-dashboard-secure_files/chart.umd.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
@@ -24,23 +24,26 @@
     
     .header {
       text-align: center;
-      margin-bottom: 40px;
-      padding: 32px 24px;
-      background: linear-gradient(135deg, #028090, #00A896);
-      border-radius: 16px;
+      margin-bottom: 32px;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
     }
     
     .header h1 {
-      font-size: 36px;
+      font-size: 28px;
       font-weight: 700;
       color: white;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
     }
     
     .header p {
-      font-size: 14px;
-      color: rgba(255,255,255,0.8);
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
       font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
     }
     
     .stats-grid {
@@ -210,20 +213,20 @@
       <p>Real-time insights from Notion database</p>
     </div>
     
-    <div id="loading" class="loading">
+    <div id="loading" class="loading" style="display: none;">
       <div class="spinner"></div>
       <div>Loading analytics from Make.com...</div>
     </div>
     
-    <div id="dashboard" style="display: none;">
+    <div id="dashboard" style="display: block;">
       <!-- Stats Cards -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-value" id="stat-total">3</div>
           <div class="stat-label">Total Ideas</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="stat-avg">0</div>
+          <div class="stat-value" id="stat-avg">0.0</div>
           <div class="stat-label">Average Score</div>
         </div>
         <div class="stat-card">
@@ -240,11 +243,11 @@
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-title">Score Distribution</div>
-          <canvas id="scoreChart"></canvas>
+          <canvas id="scoreChart" style="display: block; box-sizing: border-box; height: 269px; width: 538px;" height="269" width="538"></canvas>
         </div>
         <div class="chart-card">
           <div class="chart-title">Ideas by Category</div>
-          <canvas id="categoryChart"></canvas>
+          <canvas id="categoryChart" style="display: block; box-sizing: border-box; height: 538px; width: 538px;" height="538" width="538"></canvas>
         </div>
       </div>
       
@@ -261,9 +264,25 @@
               <th>Submitted</th>
             </tr>
           </thead>
-          <tbody id="recentTable">
-            <!-- Will be populated by JavaScript -->
-          </tbody>
+          <tbody id="recentTable"><tr>
+          <td>Untitled</td>
+          <td>Uncategorized</td>
+          <td><span class="score-badge score-low">0</span></td>
+          <td>N/A</td>
+          <td>N/A</td>
+        </tr><tr>
+          <td>Untitled</td>
+          <td>Uncategorized</td>
+          <td><span class="score-badge score-low">0</span></td>
+          <td>N/A</td>
+          <td>N/A</td>
+        </tr><tr>
+          <td>Untitled</td>
+          <td>Uncategorized</td>
+          <td><span class="score-badge score-low">0</span></td>
+          <td>N/A</td>
+          <td>N/A</td>
+        </tr></tbody>
         </table>
       </div>
       
@@ -279,9 +298,7 @@
               <th>Submitted By</th>
             </tr>
           </thead>
-          <tbody id="topTable">
-            <!-- Will be populated by JavaScript -->
-          </tbody>
+          <tbody id="topTable"><tr><td colspan="4" style="text-align: center; color: #888780;">No ideas scoring 80+ yet</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -615,5 +632,6 @@
     // Load data on page load
     window.addEventListener('load', loadData);
   </script>
-</body>
-</html>
+
+
+</body></html>
