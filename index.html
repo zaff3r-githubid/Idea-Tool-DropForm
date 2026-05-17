@@ -745,7 +745,7 @@
       });
     }
 
-   async function submitIdea() {
+  async function submitIdea() {
   const name = document.getElementById("f-name").value.trim();
   const title = document.getElementById("f-title").value.trim();
   const desc = document.getElementById("f-desc").value.trim();
@@ -764,37 +764,37 @@
   submitBtn.textContent = "Submitting...";
   submitBtn.disabled = true;
 
-  try {
-    const payload = {
-      submitted_by: name,
-      title,
-      description: desc,
-      category: cat,
-      expected_impact: impact || "Not specified",
-      resources_needed: resources.length > 0 ? resources.join(", ") : "None specified",
-      submitted_at: new Date().toISOString()
-    };
+  const payload = {
+    submitted_by: name,
+    title,
+    description: desc,
+    category: cat,
+    expected_impact: impact || "Not specified",
+    resources_needed: resources.length > 0 ? resources.join(", ") : "None specified",
+    submitted_at: new Date().toISOString()
+  };
 
-    const response = await fetch("https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+  // Send to webhook (fire-and-forget, don't wait)
+  fetch("https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).catch(error => {
+    console.error("Webhook error:", error);
+  });
 
-    if (response.ok) {
-      showSuccessMessage(title);
-      setTimeout(() => {
-        resetForm();
-      }, 3000);
-    } else {
-      throw new Error("Submission failed");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("❌ Submission failed. Please try again.");
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-  }
+  // YOUR success page shows here (your existing code handles this)
+  // Just let it display normally
+  
+  // After 1 second, show MY overlay on top
+  setTimeout(() => {
+    showSuccessMessage(title);
+  }, 1000);
+  
+  // After 4 seconds total, reset everything
+  setTimeout(() => {
+    resetForm();
+  }, 4000);
 }
 
     function showSuccessMessage(ideaTitle) {
@@ -818,29 +818,47 @@
 }
 
 function resetForm() {
+  // Remove my overlay
   const successOverlay = document.querySelector('.success-overlay');
   if (successOverlay) {
     successOverlay.classList.remove('show');
     setTimeout(() => successOverlay.remove(), 300);
   }
   
+  // Hide YOUR success page (adjust selector based on your HTML)
+  const yourSuccessPage = document.querySelector('.success-container'); // Change this selector!
+  if (yourSuccessPage) {
+    yourSuccessPage.style.display = 'none';
+  }
+  
+  // Show the form again
+  const formContainer = document.querySelector('.form-container'); // Change this selector!
+  if (formContainer) {
+    formContainer.style.display = 'block';
+  }
+  
+  // Clear all form fields
   document.getElementById("f-name").value = "";
   document.getElementById("f-title").value = "";
   document.getElementById("f-desc").value = "";
   document.getElementById("f-cat").value = "";
   document.getElementById("f-impact").value = "";
   
+  // Clear checkboxes
   document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
     cb.checked = false;
   });
   
+  // Clear file input
   const fileInput = document.getElementById("f-attach");
   if (fileInput) fileInput.value = "";
   
+  // Reset button
   const submitBtn = document.querySelector('.submit-btn');
   submitBtn.textContent = "Submit Idea";
   submitBtn.disabled = false;
   
+  // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
