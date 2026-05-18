@@ -361,7 +361,11 @@
     function extractValue(property) {
       if (!property) return null;
       
-      // Handle different Notion property types
+      // Handle Make.com simplified format (direct values)
+      if (typeof property === 'string') return property;
+      if (typeof property === 'number') return property;
+      
+      // Handle Notion API format (with property types)
       if (property.type === 'title' && property.title && property.title[0]) {
         return property.title[0].plain_text || '';
       } else if (property.type === 'rich_text' && property.rich_text && property.rich_text[0]) {
@@ -374,12 +378,23 @@
         return property.date.start || '';
       }
       
+      // Handle object with name property (common in Make.com)
+      if (property.name) return property.name;
+      
       return null;
     }
     
     function parseIdea(item) {
       // Handle both direct Notion API format and Make.com transformed format
       const props = item.properties || item;
+      
+      // Debug logging - check what we're actually receiving
+      console.log('Parsing item:', {
+        hasProperties: !!item.properties,
+        titleValue: props['Title'],
+        categoryValue: props['Category'],
+        scoreValue: props['Potential Score']
+      });
       
       return {
         title: extractValue(props['Title']) || extractValue(props['title']) || 'Untitled',
