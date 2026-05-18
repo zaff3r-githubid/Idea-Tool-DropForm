@@ -754,15 +754,12 @@
   const resources = getSelectedResources();
 
   if (!name || !title || !desc || !cat) {
-    alert("Please fill in all required fields!");
+    showError("Please fill in all required fields!");
     return;
   }
 
-  // Show loading state
-  const submitBtn = document.querySelector('.submit-btn');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = "Submitting...";
-  submitBtn.disabled = true;
+  // Show loading screen
+  setStep("loading");
 
   const payload = {
     submitted_by: name,
@@ -774,8 +771,8 @@
     submitted_at: new Date().toISOString()
   };
 
-  // Send to webhook (fire-and-forget, don't wait)
-  fetch("https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp", {
+  // Send to webhook (fire-and-forget)
+  fetch(webhookUrl || "https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
@@ -783,20 +780,22 @@
     console.error("Webhook error:", error);
   });
 
-  // YOUR success page shows here (your existing code handles this)
-  // Just let it display normally
-  
-  // After 1 second, show MY overlay on top
+  // Show YOUR success page after 1 second
+  setTimeout(() => {
+    setStep("success");
+    document.getElementById("succ-msg").textContent = `"${title}" submitted successfully. AI enrichment happening in Make.com!`;
+  }, 1000);
+
+  // After another 1 second, show MY overlay on top
   setTimeout(() => {
     showSuccessMessage(title);
-  }, 1000);
-  
-  // After 4 seconds total, reset everything
-  setTimeout(() => {
-    resetForm();
-  }, 4000);
-}
+  }, 2000);
 
+  // After 4 seconds total, reload page to reset
+  setTimeout(() => {
+    location.reload();
+  }, 5000);
+}
     function showSuccessMessage(ideaTitle) {
   const successDiv = document.createElement('div');
   successDiv.className = 'success-overlay';
