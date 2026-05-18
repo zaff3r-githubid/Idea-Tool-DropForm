@@ -17,7 +17,7 @@
       padding: 24px 16px 40px;
     }
     .shell {
-      max-width: 540px;
+      max-width: 680px;  /* Changed from 540px */
       margin: 0 auto;
       background: #2c2c2a;
       border: 0.5px solid #444441;
@@ -108,10 +108,10 @@
     
     /* Checkbox styling */
     .checkbox-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);  /* Changed to 2 columns */
+      gap: 12px;
+      padding: 16px;
       background: #1a1a1a;
       border-radius: 10px;
       border: 0.5px solid #5f5e5a;
@@ -746,15 +746,7 @@
     <div class="cost-last-updated" id="cost-last-updated">Not loaded yet</div>
   </div>
 </div>
-    <!-- Analytics Dashboard Link -->
-    <div class="notion-link-container" style="margin-top: 16px;">
-    <div class="notion-link-label">View Real-Time Analytics:</div>
-      <a href="analytics-dashboard-secure.html" 
-         target="_blank"
-         class="notion-link-btn">
-          📊 Analytics Dashboard
-      </a>
-    </div>
+    
     <div id="view-loading" class="loading-zone" style="display:none">
       <div class="spinner-ring"></div>
       <div class="loading-text">Processing your idea</div>
