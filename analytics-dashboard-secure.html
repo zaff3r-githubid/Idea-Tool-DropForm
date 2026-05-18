@@ -204,6 +204,21 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
     }
+    
+    .last-updated {
+      text-align: center;
+      font-size: 11px;
+      color: #888780;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 24px;
+      padding: 8px;
+      background: #2c2c2a;
+      border-radius: 8px;
+    }
+    
+    .last-updated.loading {
+      color: #f59e0b;
+    }
   </style>
 </head>
 <body>
@@ -211,6 +226,10 @@
     <div class="header">
       <h1>📊 AI Intelligence Stack Analytics</h1>
       <p>Real-time insights from Notion database</p>
+    </div>
+    
+    <div class="last-updated" id="last-updated">
+      Loading data...
     </div>
     
     <div id="loading" class="loading">
@@ -306,7 +325,17 @@
     async function fetchNotionData() {
       console.log('Fetching from Make.com webhook...');
       
-      const response = await fetch(CONFIG.WEBHOOK_URL);
+      // Add timestamp to prevent caching
+      const cacheBustUrl = `${CONFIG.WEBHOOK_URL}?t=${Date.now()}`;
+      
+      const response = await fetch(cacheBustUrl, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -566,6 +595,10 @@
     
     async function loadData() {
       try {
+        const lastUpdatedEl = document.getElementById('last-updated');
+        lastUpdatedEl.textContent = 'Refreshing data...';
+        lastUpdatedEl.className = 'last-updated loading';
+        
         document.getElementById('loading').style.display = 'block';
         document.getElementById('dashboard').style.display = 'none';
         
@@ -589,6 +622,16 @@
         updateRecentTable(allIdeas);
         updateTopTable(allIdeas);
         
+        // Update last updated timestamp
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        lastUpdatedEl.textContent = `Last updated: ${timeString}`;
+        lastUpdatedEl.className = 'last-updated';
+        
         document.getElementById('loading').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         
@@ -596,6 +639,11 @@
         
       } catch (error) {
         console.error('Error loading data:', error);
+        
+        const lastUpdatedEl = document.getElementById('last-updated');
+        lastUpdatedEl.textContent = `Error loading data - click refresh to retry`;
+        lastUpdatedEl.className = 'last-updated';
+        
         document.getElementById('loading').innerHTML = `
           <div class="error-message">
             <h3>⚠️ Error Loading Analytics</h3>
@@ -617,6 +665,12 @@
     
     // Load data on page load
     window.addEventListener('load', loadData);
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+      console.log('Auto-refreshing data...');
+      loadData();
+    }, 30000);
   </script>
 </body>
 </html>
