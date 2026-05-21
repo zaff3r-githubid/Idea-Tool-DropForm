@@ -711,42 +711,39 @@
           📊 AI Tools Database
        </a>
       </div>
+      </div>
+      <div class="ai-cost-container">
+        <div class="cost-header">
+          <div class="cost-icon">💰</div>
+          <div class="cost-title">AI Observability</div>
+        </div>
+        <div class="cost-stats">
+          <div class="cost-stat">
+            <div class="cost-label">Total Ideas</div>
+            <div class="cost-value" id="cost-total-ideas">-</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-label">Total Tokens</div>
+            <div class="cost-value" id="cost-total-tokens">-</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-label">Total Cost</div>
+            <div class="cost-value" id="cost-total-cost">$0.00</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-label">Avg Cost/Idea</div>
+            <div class="cost-value" id="cost-avg">$0.00</div>
+          </div>
+        </div>
+        <div class="cost-refresh">
+          <button class="cost-refresh-btn" onclick="refreshAICosts()">
+            <span class="refresh-icon">↻</span> Refresh Costs
+          </button>
+          <div class="cost-last-updated" id="cost-last-updated">Not loaded yet</div>
+        </div>
+      </div>
     </div>
-    <!-- AI COST TRACKING - Add this after your Notion Database Link -->
 
-<div class="ai-cost-container">
-  <div class="cost-header">
-    <div class="cost-icon">💰</div>
-    <div class="cost-title">AI Observability</div>
-  </div>
-  
-  <div class="cost-stats">
-    <div class="cost-stat">
-      <div class="cost-label">Total Ideas</div>
-      <div class="cost-value" id="cost-total-ideas">-</div>
-    </div>
-    <div class="cost-stat">
-      <div class="cost-label">Total Tokens</div>
-      <div class="cost-value" id="cost-total-tokens">-</div>
-    </div>
-    <div class="cost-stat">
-      <div class="cost-label">Total Cost</div>
-      <div class="cost-value" id="cost-total-cost">$0.00</div>
-    </div>
-    <div class="cost-stat">
-      <div class="cost-label">Avg Cost/Idea</div>
-      <div class="cost-value" id="cost-avg">$0.00</div>
-    </div>
-  </div>
-  
-  <div class="cost-refresh">
-    <button class="cost-refresh-btn" onclick="refreshAICosts()">
-      <span class="refresh-icon">↻</span> Refresh Costs
-    </button>
-    <div class="cost-last-updated" id="cost-last-updated">Not loaded yet</div>
-  </div>
-</div>
-    
     <div id="view-loading" class="loading-zone" style="display:none">
       <div class="spinner-ring"></div>
       <div class="loading-text">Processing your idea</div>
