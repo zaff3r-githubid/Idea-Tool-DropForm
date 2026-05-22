@@ -2,7 +2,7 @@
 
 > A serverless AI-powered idea collection and evaluation system built for AI Practitioners.
 
-[![GitHub Pages](https://img.shields.io/badge/Deployed-GitHub%20Pages-orange)](https://YOUR-USERNAME.github.io/IDEA-TOOL-DROPFORM/)
+[![GitHub Pages](https://img.shields.io/badge/Deployed-GitHub%20Pages-orange)](https://https://zaff3r-githubid.github.io/Idea-Tool-DropForm/)
 [![Make.com](https://img.shields.io/badge/Automation-Make.com-purple)](https://make.com)
 [![Claude AI](https://img.shields.io/badge/AI-Claude%20Sonnet-blue)](https://anthropic.com)
 [![Notion](https://img.shields.io/badge/Database-Notion-black)](https://notion.so)
