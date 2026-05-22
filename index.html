@@ -589,7 +589,54 @@
   font-size: 10px;
   color: #888780;
   font-family: 'JetBrains Mono', monospace;
-}    
+  text-align: center;
+  margin-top: 8px;
+}
+
+.cost-divider {
+  height: 0.5px;
+  background: #444441;
+  margin: 12px 0;
+}
+
+.cost-last-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #b4b2a9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.cost-last-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cost-last-row span:first-child {
+  font-size: 13px;
+  color: #e8e7e1;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.cost-last-amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4ade80;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cost-last-tokens {
+  font-size: 11px;
+  color: #888780;
+  font-family: 'JetBrains Mono', monospace;
+}
   </style>
 </head>
 <body>
@@ -720,11 +767,11 @@
         <div class="cost-stats">
           <div class="cost-stat">
             <div class="cost-label">Total Ideas</div>
-            <div class="cost-value" id="cost-total-ideas">-</div>
+            <div class="cost-value" id="cost-total-ideas">0</div>
           </div>
           <div class="cost-stat">
             <div class="cost-label">Total Tokens</div>
-            <div class="cost-value" id="cost-total-tokens">-</div>
+            <div class="cost-value" id="cost-total-tokens">0</div>
           </div>
           <div class="cost-stat">
             <div class="cost-label">Total Cost</div>
@@ -735,11 +782,18 @@
             <div class="cost-value" id="cost-avg">$0.00</div>
           </div>
         </div>
+        <!-- Last submission breakdown -->
+        <div class="cost-last-submission" id="cost-last-submission" style="display:none">
+          <div class="cost-divider"></div>
+          <div class="cost-last-title">🆕 Last Submission</div>
+          <div class="cost-last-row">
+            <span id="cost-last-idea-name">-</span>
+            <span id="cost-last-idea-cost" class="cost-last-amount">$0.00</span>
+          </div>
+          <div class="cost-last-tokens" id="cost-last-tokens">0 tokens</div>
+        </div>
         <div class="cost-refresh">
-          <button class="cost-refresh-btn" onclick="refreshAICosts()">
-            <span class="refresh-icon">↻</span> Refresh Costs
-          </button>
-          <div class="cost-last-updated" id="cost-last-updated">Not loaded yet</div>
+          <div class="cost-last-updated" id="cost-last-updated">Tracking active — updates after each submission</div>
         </div>
       </div>
     </div>
@@ -893,27 +947,35 @@
     submitted_at: new Date().toISOString()
   };
 
-  // Send to webhook (fire-and-forget)
+  // Send to webhook and capture cost response in background
   fetch(webhookUrl || "https://hook.us2.make.com/a4arscx23jto1v6dsskebjpoe3xdj5mp", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
-  }).catch(error => {
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Make.com returned cost data - store it!
+    if (data && data.input_tokens) {
+      storeCostData(title, data.input_tokens, data.output_tokens, data.cost);
+    }
+  })
+  .catch(error => {
     console.error("Webhook error:", error);
   });
 
-  // Show YOUR success page after 1 second
+  // Show success page after 1 second (don't wait for Make.com)
   setTimeout(() => {
     setStep("success");
     document.getElementById("succ-msg").textContent = `"${title}" submitted successfully. AI enrichment happening in Make.com!`;
   }, 1000);
 
-  // After another 1 second, show MY overlay on top
+  // Show overlay after 2 seconds
   setTimeout(() => {
     showSuccessMessage(title);
   }, 2000);
 
-  // After 4 seconds total, reset form
+  // Reset form after 5 seconds
   setTimeout(() => {
     resetFormCompletely();
   }, 5000);
@@ -997,34 +1059,99 @@ function resetFormCompletely() {
       setStep("form");
     }
 
-// AI Cost Tracking - Links to local Python tracker
-// Run: python cost_tracker.py --watch  on your local machine
-async function refreshAICosts() {
-  const btn = document.querySelector('.cost-refresh-btn');
-  const icon = document.querySelector('.refresh-icon');
-  
-  btn.disabled = true;
-  icon.style.transform = 'rotate(360deg)';
-  
-  // Show message directing to Python script
-  document.getElementById('cost-total-ideas').textContent = 'Run';
-  document.getElementById('cost-total-tokens').textContent = 'Python';
-  document.getElementById('cost-total-cost').textContent = 'Script';
-  document.getElementById('cost-avg').textContent = 'Locally';
-  document.getElementById('cost-last-updated').textContent = 
-    'Use: python cost_tracker.py --watch';
-  
-  setTimeout(() => {
-    btn.disabled = false;
-    icon.style.transform = 'rotate(0deg)';
-  }, 500);
-}
+    // ============================================================
+    // AI OBSERVABILITY - localStorage Cost Tracking
+    // No API keys needed - stores data locally in browser
+    // Updates automatically when Make.com returns token data
+    // ============================================================
 
-// Don't auto-load on page start (no webhook configured)
-// window.addEventListener('load', () => {
-//   setTimeout(refreshAICosts, 1000);
-// });
+    const COST_STORAGE_KEY = 'ai_stack_costs';
 
+    function getCostData() {
+      try {
+        const stored = localStorage.getItem(COST_STORAGE_KEY);
+        return stored ? JSON.parse(stored) : {
+          totalIdeas: 0,
+          totalInputTokens: 0,
+          totalOutputTokens: 0,
+          totalCost: 0,
+          submissions: []
+        };
+      } catch(e) {
+        return {
+          totalIdeas: 0,
+          totalInputTokens: 0,
+          totalOutputTokens: 0,
+          totalCost: 0,
+          submissions: []
+        };
+      }
+    }
+
+    function storeCostData(title, inputTokens, outputTokens, cost) {
+      const data = getCostData();
+
+      // Update totals
+      data.totalIdeas += 1;
+      data.totalInputTokens += parseInt(inputTokens) || 0;
+      data.totalOutputTokens += parseInt(outputTokens) || 0;
+      data.totalCost += parseFloat(cost) || 0;
+
+      // Add to submissions log (keep last 50)
+      data.submissions.unshift({
+        title: title,
+        inputTokens: parseInt(inputTokens) || 0,
+        outputTokens: parseInt(outputTokens) || 0,
+        totalTokens: (parseInt(inputTokens) || 0) + (parseInt(outputTokens) || 0),
+        cost: parseFloat(cost) || 0,
+        timestamp: new Date().toISOString()
+      });
+      if (data.submissions.length > 50) data.submissions.pop();
+
+      // Save to localStorage
+      localStorage.setItem(COST_STORAGE_KEY, JSON.stringify(data));
+
+      // Update the display immediately
+      updateCostDisplay(data, data.submissions[0]);
+
+      console.log(`💰 Cost tracked: ${title} | Tokens: ${inputTokens}+${outputTokens} | Cost: $${parseFloat(cost).toFixed(4)}`);
+    }
+
+    function updateCostDisplay(data, lastSubmission) {
+      const avgCost = data.totalIdeas > 0 ? data.totalCost / data.totalIdeas : 0;
+      const totalTokens = data.totalInputTokens + data.totalOutputTokens;
+
+      // Update stat cards
+      document.getElementById('cost-total-ideas').textContent = data.totalIdeas;
+      document.getElementById('cost-total-tokens').textContent = totalTokens.toLocaleString();
+      document.getElementById('cost-total-cost').textContent = `$${data.totalCost.toFixed(4)}`;
+      document.getElementById('cost-avg').textContent = `$${avgCost.toFixed(4)}`;
+
+      // Show last submission details
+      if (lastSubmission) {
+        const lastSection = document.getElementById('cost-last-submission');
+        lastSection.style.display = 'block';
+        document.getElementById('cost-last-idea-name').textContent = lastSubmission.title;
+        document.getElementById('cost-last-idea-cost').textContent = `$${lastSubmission.cost.toFixed(4)}`;
+        document.getElementById('cost-last-tokens').textContent =
+          `↑ ${lastSubmission.inputTokens.toLocaleString()} in · ${lastSubmission.outputTokens.toLocaleString()} out · ${lastSubmission.totalTokens.toLocaleString()} total`;
+      }
+
+      // Update timestamp
+      const now = new Date();
+      document.getElementById('cost-last-updated').textContent =
+        `Last updated: ${now.toLocaleTimeString()}`;
+    }
+
+    function loadCostDisplay() {
+      const data = getCostData();
+      if (data.totalIdeas > 0) {
+        updateCostDisplay(data, data.submissions[0]);
+      }
+    }
+
+    // Load saved costs on page load
+    window.addEventListener('load', loadCostDisplay);
   </script>
 </body>
 </html>
